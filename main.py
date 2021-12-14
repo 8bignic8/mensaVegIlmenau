@@ -56,7 +56,10 @@ else:
 if(noConfig):
     parser = argparse.ArgumentParser(description='Input of the Telegram_Bot token')
     #https://stackoverflow.com/questions/15301147/python-argparse-default-value-or-specified-value
-    parser.add_argument('Telegram_Bot_Token', metavar='-t',nargs='?', const=1,  type=str, default= '5083693463:AAGW-VqK4_l_uH8pC_H3GrLqTQOi0v61xjc',
+    #parser.add_argument('Telegram_Bot_Token', metavar='-t',nargs='?', const=1,  type=str, default= '5083693463:AAGW-VqK4_l_uH8pC_H3GrLqTQOi0v61xjc',
+     #                   help='A string seperated by : ')
+
+    parser.add_argument('Telegram_Bot_Token', metavar='-t', nargs='?', const=1, type=str,
                         help='A string seperated by : ')
 
     args = parser.parse_args()
@@ -66,6 +69,10 @@ if(noConfig):
     config = loadConf(json_config_path)
 
 config = updateConfig(config, 'website', 'https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')
+config = updateConfig(config, 'property_a', 'Vegane') ## what the script searches for
+config = updateConfig(config, 'property_b', 'Vegetarisch') ## what the script searches for
+config = updateConfig(config, 'property_c', '-1') ## what the script searches for
+
 
 options = Options()
 options.add_argument("--headless")
@@ -73,37 +80,51 @@ driver = webdriver.Firefox(executable_path=r'gdriver/geckodriver', options=optio
 driver.get(config['website'])#'https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')
 
 foodPlan_html=driver.find_element(By.ID, "speiseplan") ## https://pythonbasics.org/selenium-find-element/
-foodNames = foodPlan_html.find_elements(By.CLASS_NAME, "mealText")
+
+allMeals = foodPlan_html.find_elements(By.CLASS_NAME, "container")
+
+#foodN = allMeals[0]#.find_element(By.CLASS_NAME, "mealText")
+j = 0
+foodList = {}
+while(len(allMeals) >= j):
+    try:
+        if(allMeals[j].find_element(By.CLASS_NAME, "splIconMeal") is not None):
+            a = allMeals[j].find_elements(By.CLASS_NAME, "splIconMeal") ##
+            propApply = False
+            for item in a:
+                #print(item.get_attribute("alt"))
+                ###TO DO check if some Zusatzstoffe or Allergene
+                if((config['property_a'] in item.get_attribute("alt")) or
+                        (config['property_b'] in item.get_attribute("alt")) or
+                        (config['property_c'] in item.get_attribute("alt"))):
+                    #property = property + ' and ' + item.get_attribute("alt")
+                    propApply = True
+
+            if(propApply):
+                # https://www.w3schools.com/python/python_dictionaries.asp
+                foodList = foodList.copy()  # copys the current dict to itself and than
+                foodList.update({(len(foodList) + 1): allMeals[j]})  # adds the current dict
+                propApply = False
+    except:
+        pass
+    j = j + 1
+
+foodNames = foodPlan_html.find_element(By.CLASS_NAME, "mealText")
 additives = foodPlan_html.find_elements(By.CLASS_NAME, "zusatzstoffe")
 price = foodPlan_html.find_elements(By.CLASS_NAME, "mealPreise")
 
 foodProperties_all = foodPlan_html.find_elements(By.CLASS_NAME, "splIconMeal") ##
 
-#foodProperties_all[0].get_attribute("alt")
 
-def checkProp(property, foodList):  #checks if the list has the wanted property
-    check = False
-    for item in foodList:
-        loop_property = item.get_attribute("alt")
-        if (property == loop_property):
-            check = True
-    return check
+#print(foodList[1].text)
+h = 1
+sendTGMessage('Das '+ config['property_a'] +' Essen des Tages ist:', config)
+while(len(foodList)>=h):
 
-#print(foodProperties)
-
-#infoB = info.find_elements(By.CLASS_NAME, "")
-#print(dir(foodProperties))
-
-def isVegan():
-    pass ## TO DO
-
-def printText(itmens):
-    for item in itmens:
-        print(item.text)
-        sendTGMessage(item.text, config)
-printText(foodNames)
-printText(additives)
-
+    sendTGMessage(foodList[h].text, config)
+    if(h==2):
+        sendTGMessage('Oh sogar noch eins mehr \U0001F601', config)
+    h = h + 1
 
 driver.close() ## cloese the webbrowser instance
 exit()

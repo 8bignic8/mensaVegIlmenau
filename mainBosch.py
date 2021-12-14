@@ -4,13 +4,26 @@
 
 # find_searchbox = driver.findElement(By.id(“text-box”));
 
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-fro
+import time
+import argparse
+import os
 
-options = Options()
-options.add_argument("--headless")
-driver = webdriver.Firefox(executable_path=r'gdriver/geckodriver', options=options)
-driver.get('https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')
+def remind(h,m):
+    te = time.localtime() #asks the local computer time
+    if((te.tm_hour == h) and te.tm_min == m):
+        return True
 
-element=driver.find_element(By.ID,"speiseplan")
+json_config_path = "config.json"
+parser = argparse.ArgumentParser(description='Input of the Telegram_Bot token')
+parser.add_argument('Telegram_Bot_Token', metavar='-t', nargs='?', const=1, type=str, help='A string seperated by : ')
+## TO DO add args for houer and min
+args = parser.parse_args()
+if(args):
+    Telegram_token = args.Telegram_Bot_Token
+
+if(not(os.path.isfile(json_config_path)) and remind(11,30)):
+    os.system("python3 main.py" + Telegram_token)
+while(True):
+    if(remind(11,30)):
+        os.system("python3 main.py")
+        time.sleep(65)
