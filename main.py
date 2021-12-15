@@ -66,7 +66,7 @@ if(noConfig):
     args = parser.parse_args()
     if(args):
         Telegram_token = args.Telegram_Bot_Token
-        a = os.system("python3 ./find_telegram_chatID/setConfig.py "+Telegram_token) ## generates the config.json with the telegram function
+        a = os.system("python ./find_telegram_chatID/setConfig.py "+Telegram_token) ## generates the config.json with the telegram function
     config = loadConf(json_config_path)
 
 config = updateConfig(config, 'website', 'https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')

@@ -22,7 +22,7 @@ if(args):
     Telegram_token = args.Telegram_Bot_Token
 
 if(not(os.path.isfile(json_config_path))):
-    os.system("python3 main.py " + Telegram_token)
+    os.system("python main.py " + Telegram_token)
 
 while(True):
     if(remind(11,30)):
