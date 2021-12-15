@@ -3,10 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 ##slef
 *.DS_*
 *.idea
 config.json
+geckodriver.log
 
 # C extensions
 *.so
