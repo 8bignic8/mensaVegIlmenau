@@ -5,6 +5,8 @@ This is a simple webcrawler to extract the vegan menu from the Mensa Eherenberg 
 # Install:
 Install Selenium https://realpython.com/modern-web-automation-with-python-and-selenium/		pip install selenium
 
+To install the Mensa BOT:
+git clone --recursive --progress https://github.com/8bignic8/mensaVegIlmenau
 
 download and install geckodriver for your system
 https://github.com/mozilla/geckodriver/releases/
