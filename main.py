@@ -29,6 +29,7 @@ def writeConf(conf):
             json.dump(conf, f)
     except:
         print('config file write error')
+
 def loadConf(json_config_path):
     #### reads config.json
     with open(json_config_path, 'r') as j:
@@ -75,7 +76,7 @@ config = updateConfig(config, 'property_c', '-1') ## what the script searches fo
 
 
 options = Options()
-options.add_argument("--headless")
+options.add_argument("--headless")  # Strart firefox without window
 driver = webdriver.Firefox(executable_path=r'gdriver/geckodriver', options=options)  ## path to the gdriver
 driver.get(config['website'])#'https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')
 
@@ -119,6 +120,7 @@ foodProperties_all = foodPlan_html.find_elements(By.CLASS_NAME, "splIconMeal") #
 #print(foodList[1].text)
 h = 1
 sendTGMessage('Das '+ config['property_a'] +' Essen des Tages ist:', config)
+
 while(len(foodList)>=h):
 
     sendTGMessage(foodList[h].text, config)

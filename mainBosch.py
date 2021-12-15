@@ -15,7 +15,7 @@ def remind(h,m):
 
 json_config_path = "config.json"
 parser = argparse.ArgumentParser(description='Input of the Telegram_Bot token')
-parser.add_argument('Telegram_Bot_Token', metavar='-t', nargs='?', const=1, type=str, help='A string seperated by : ')
+parser.add_argument('Telegram_Bot_Token', metavar='-t', nargs='?', const=1, type=str, help='A BOT TOKEN string seperated by : ')
 ## TO DO add args for houer and min
 args = parser.parse_args()
 if(args):
@@ -23,6 +23,7 @@ if(args):
 
 if(not(os.path.isfile(json_config_path))):
     os.system("python3 main.py " + Telegram_token)
+
 while(True):
     if(remind(11,30)):
         os.system("python3 main.py")
