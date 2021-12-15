@@ -1,3 +1,3 @@
 [submodule "find_telegram_chatID"]
 	path = find_telegram_chatID
-	url = git@github.com:8bignic8/find_telegram_chatID.git
+	url = https://github.com/8bignic8/find_telegram_chatID

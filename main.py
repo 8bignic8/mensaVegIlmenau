@@ -123,9 +123,11 @@ sendTGMessage('Das '+ config['property_a'] +' Essen des Tages ist:', config)
 
 while(len(foodList)>=h):
 
-    sendTGMessage(foodList[h].text, config)
     if(h==2):
         sendTGMessage('Oh sogar noch eins mehr \U0001F601', config)
+        ###only gets activated if there are more than two instances in foodList
+
+    sendTGMessage(foodList[h].text, config)
     h = h + 1
 
 driver.close() ## cloese the webbrowser instance
