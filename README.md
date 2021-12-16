@@ -6,6 +6,8 @@ This is a simple webcrawler to extract the vegan menu from the Mensa Eherenberg 
 Install Selenium https://realpython.com/modern-web-automation-with-python-and-selenium/		pip install selenium
 
 Raspberry pi:
+Selenium Install:
+https://patrikmojzis.medium.com/how-to-run-selenium-using-python-on-raspberry-pi-d3fe058f011
 sudo python -m pip install selenium==2.53.5
 sudo apt-get install chromium-chromedriver
 
