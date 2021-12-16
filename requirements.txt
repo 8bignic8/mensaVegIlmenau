@@ -2,4 +2,4 @@ telegram-send
 selenium
 jsonlib
 requests
-
+pyvirtualdisplay

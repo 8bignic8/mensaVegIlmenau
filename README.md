@@ -5,6 +5,10 @@ This is a simple webcrawler to extract the vegan menu from the Mensa Eherenberg 
 # Install:
 Install Selenium https://realpython.com/modern-web-automation-with-python-and-selenium/		pip install selenium
 
+Raspberry pi:
+sudo python -m pip install selenium==2.53.5
+sudo apt-get install chromium-chromedriver
+
 To install the Mensa BOT:
 git clone --recursive --progress https://github.com/8bignic8/mensaVegIlmenau
 
@@ -25,4 +29,4 @@ like e.g.
 
 python3 mainBosch.py 1234567:djkfbkjr4hoohfffjoe <---- herer your API Telegram Bot_Token
 
-And than you get the food info you wanted at 11:30 AM to the group or Bot-chat you wrote right before starting the script. (but your Bot needs to be in that group ;)) 
+And than you get the food info you wanted at 11:30 AM to the group or Bot-chat you wrote right before starting the script. (but your Bot needs to be in that group ;))

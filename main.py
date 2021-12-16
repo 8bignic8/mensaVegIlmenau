@@ -14,6 +14,7 @@ import telegram_send
 import requests
 import argparse
 import os
+from pyvirtualdisplay import Display
 
 json_config_path = "config.json"
 
@@ -62,10 +63,13 @@ if(noConfig):
 
     parser.add_argument('Telegram_Bot_Token', metavar='-t', nargs='?', const=1, type=str,
                         help='A string seperated by : ')
-
+    parser.add_argument('RaspBerryPi', metavar='-p', nargs='?', const=1, type=bool, default=False,
+                        help='Needs to be True or False')
     args = parser.parse_args()
+    #### TO change to RPI constant read is False or write to Config!!
     if(args):
         Telegram_token = args.Telegram_Bot_Token
+        rpi = args.RaspBerryPi
         a = os.system("python ./find_telegram_chatID/setConfig.py "+Telegram_token) ## generates the config.json with the telegram function
     config = loadConf(json_config_path)
 
@@ -74,10 +78,18 @@ config = updateConfig(config, 'property_a', 'Vegane') ## what the script searche
 config = updateConfig(config, 'property_b', 'Vegetarisch') ## what the script searches for
 config = updateConfig(config, 'property_c', '-1') ## what the script searches for
 
-
-options = Options()
-options.add_argument("--headless")  # Strart firefox without window
-driver = webdriver.Firefox(executable_path=r'gdriver/geckodriver', options=options)  ## path to the gdriver
+#rpi = False
+if(rpi):
+    ##seting up a virtuell display to run the webbrowser in
+    print('Using RPI webinterface')
+    display = Display(visible=0, size=(800, 600))
+    display.start()
+    driver = webdriver.Chrome()#  ## path to the gdriver
+else:
+    print('Using normal webinterface')
+    options = Options()
+    options.add_argument("--headless")  # Strart firefox without window
+    driver = webdriver.Firefox(executable_path=r'gdriver/geckodriver', options=options)  ## path to the gdriver
 driver.get(config['website'])#'https://www.stw-thueringen.de/mensen/ilmenau/mensa-ehrenberg.html')
 
 foodPlan_html=driver.find_element(By.ID, "speiseplan") ## https://pythonbasics.org/selenium-find-element/
@@ -131,4 +143,6 @@ while(len(foodList)>=h):
     h = h + 1
 
 driver.close() ## cloese the webbrowser instance
+if(rpi):
+    display.stop()
 exit()
