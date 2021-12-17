@@ -1,9 +1,6 @@
 #### TO DO
-
-## Price adding
-## Printing to Telegram
 ### Essens container einzeln bearbeiten
-### Save the food over the year
+### Save the food over the year aka Loging the food
 
 ####
 from selenium import webdriver
@@ -21,12 +18,11 @@ json_config_path = "config.json"
 def updateConfig(conf, name, value):
     conf = conf.copy()  # copys the current dict to itself and than
     conf.update({name: value})  # adds the current dict
-    writeConf(conf)
     return conf
 
-def writeConf(conf):
+def writeConf(conf,path):
     try:
-        with open('config.json', 'w', encoding='utf-8') as f: #writing config.json in utf-8
+        with open(path, 'w', encoding='utf-8') as f: #writing config.json in utf-8
             json.dump(conf, f)
     except:
         print('config file write error')
@@ -45,14 +41,17 @@ def sendTGMessage(Message, config):
         url='https://api.telegram.org/bot{0}/{1}'.format(config['token'], method),
         data={'chat_id': config['myuserid'], 'text': str(Message)}
     ).json()
+def jsonConfIsNotavalable(json_config_path):
+    if(not(os.path.isfile(json_config_path))): ##checks if file is available
+        noConfig = True
+        print('Adding the arguments to == > config.json')
+    else:
+        noConfig = False
+        print('Loading existing conf')
+        config = loadConf(json_config_path)
+    return noConfig
 
-if(not(os.path.isfile(json_config_path))): ##checks if file is available
-    noConfig = True
-    print('Adding the arguments to == > config.json')
-else:
-    noConfig = False
-    print('Loading existing conf')
-    config = loadConf(json_config_path)
+noConfig = jsonConfIsNotavalable(json_config_path)
 
 ##adding the arguments
 if(noConfig):
@@ -77,6 +76,8 @@ config = updateConfig(config, 'website', 'https://www.stw-thueringen.de/mensen/i
 config = updateConfig(config, 'property_a', 'Vegane') ## what the script searches for
 config = updateConfig(config, 'property_b', 'Vegetarisch') ## what the script searches for
 config = updateConfig(config, 'property_c', '-1') ## what the script searches for
+#save to file
+writeConf(config,json_config_path)
 
 #rpi = False
 if(rpi):
@@ -131,7 +132,7 @@ foodProperties_all = foodPlan_html.find_elements(By.CLASS_NAME, "splIconMeal") #
 
 #print(foodList[1].text)
 h = 1
-sendTGMessage('Das '+ config['property_a'] +' Essen des Tages ist:', config)
+sendTGMessage('Das '+ config['property_a'] +' oder ' + config['property_b'] + Essen des Tages ist:', config)
 
 while(len(foodList)>=h):
 

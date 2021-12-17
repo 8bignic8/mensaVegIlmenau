@@ -32,3 +32,7 @@ like e.g.
 python3 mainBosch.py 1234567:djkfbkjr4hoohfffjoe <---- herer your API Telegram Bot_Token
 
 And than you get the food info you wanted at 11:30 AM to the group or Bot-chat you wrote right before starting the script. (but your Bot needs to be in that group ;))
+
+
+##Waring
+The script will read your local server time so if this wrong so will be the reminder!y
